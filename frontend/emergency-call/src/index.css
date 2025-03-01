@@ -89,21 +89,45 @@ button:focus-visible {
 
 #root {
   min-height: 100vh;
-  min-height: var(--app-height);
   position: relative;
-  z-index: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-/* Ensure content is readable over the background */
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Map styles */
+#map {
+  height: 100vh !important;
+  width: 100vw !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: -1 !important;
+}
+
+/* Content styles */
 .content-wrapper {
+  position: relative;
+  z-index: 1;
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 0 20px rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
@@ -130,4 +154,12 @@ button {
 h1, h2, h3, h4, h5, h6 {
   text-align: center;
   width: 100%;
+}
+
+/* Navigation styles */
+nav {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
 }
