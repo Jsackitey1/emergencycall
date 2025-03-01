@@ -1,4 +1,4 @@
-import { ChakraProvider, CSSReset, Box } from '@chakra-ui/react';
+import { ChakraProvider, CSSReset, Box, Center } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Contacts from './pages/Contacts';
@@ -18,6 +18,9 @@ function App() {
             minH="100vh" 
             display="flex" 
             flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            width="100%"
           >
             <Box 
               className="content-wrapper" 
@@ -25,6 +28,11 @@ function App() {
               my={4} 
               p={4} 
               flex="1"
+              width="100%"
+              maxW="container.md"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
             >
               <Routes>
                 <Route path="/" element={<Dashboard />} />

@@ -31,6 +31,9 @@ body {
   min-height: var(--app-height);
   position: relative;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 body::before {
@@ -89,6 +92,10 @@ button:focus-visible {
   min-height: var(--app-height);
   position: relative;
   z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Ensure content is readable over the background */
@@ -97,4 +104,30 @@ button:focus-visible {
   backdrop-filter: blur(8px);
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Center form elements */
+form {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Center buttons */
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Center headings */
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+  width: 100%;
 }

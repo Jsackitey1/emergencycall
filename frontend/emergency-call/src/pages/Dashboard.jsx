@@ -146,11 +146,11 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Container maxW="container.md" py={8}>
-      <VStack spacing={8} align="stretch">
+    <Container maxW="container.md" py={8} centerContent>
+      <VStack spacing={8} align="center" width="100%">
         <Heading textAlign="center" mb={8}>EmergencyConnect</Heading>
         
-        <Box textAlign="center">
+        <Box textAlign="center" width="100%">
           <Button
             size="lg"
             height="200px"
@@ -160,17 +160,31 @@ const Dashboard = () => {
             onClick={handleSOS}
             _hover={{ transform: 'scale(1.05)' }}
             transition="all 0.2s"
+            mx="auto"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            fontSize="2xl"
+            fontWeight="bold"
           >
             {isSOSActive ? `Cancel (${countdown})` : 'SOS'}
           </Button>
         </Box>
 
-        <Grid templateColumns="repeat(2, 1fr)" gap={4} mt={8}>
+        <Grid 
+          templateColumns="repeat(2, 1fr)" 
+          gap={4} 
+          mt={8}
+          width="100%"
+          maxW="500px"
+          mx="auto"
+        >
           <Button
             leftIcon={<FaPhone />}
             colorScheme="green"
             onClick={handleEmergencyCall}
             size="lg"
+            width="100%"
           >
             Emergency Call
           </Button>
@@ -179,6 +193,7 @@ const Dashboard = () => {
             colorScheme="purple"
             onClick={shareLocation}
             size="lg"
+            width="100%"
           >
             Share Location
           </Button>
@@ -187,6 +202,7 @@ const Dashboard = () => {
             colorScheme="orange"
             onClick={sendAlert}
             size="lg"
+            width="100%"
           >
             Send Alert
           </Button>
@@ -195,23 +211,24 @@ const Dashboard = () => {
             colorScheme="teal"
             onClick={() => navigate('/history')}
             size="lg"
+            width="100%"
           >
             View History
           </Button>
         </Grid>
       </VStack>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>No Emergency Contacts</ModalHeader>
+        <ModalContent mx={4}>
+          <ModalHeader textAlign="center">No Emergency Contacts</ModalHeader>
           <ModalBody>
-            <Text>
+            <Text textAlign="center">
               Please add emergency contacts before using the SOS feature.
               This ensures we can notify your trusted contacts in case of emergency.
             </Text>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter justifyContent="center">
             <Button colorScheme="blue" mr={3} onClick={() => navigate('/contacts')}>
               Add Contacts
             </Button>
