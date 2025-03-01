@@ -28,17 +28,6 @@ const COLOR_MAP = {
 const History = () => {
   const { history } = useEmergency();
 
-  const formatDate = (dateString) => {
-    const options = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
   if (history.length === 0) {
     return (
       <Container maxW="container.md" py={8}>
@@ -57,7 +46,6 @@ const History = () => {
     <Container maxW="container.md" py={8}>
       <VStack spacing={8} align="stretch">
         <Heading textAlign="center">Emergency History</Heading>
-
         <VStack spacing={4} align="stretch">
           {history.map((log) => (
             <Box
@@ -75,15 +63,13 @@ const History = () => {
                 />
                 <Box flex="1">
                   <HStack justify="space-between" mb={2}>
-                    <Text fontWeight="bold">
-                      {log.details}
-                    </Text>
+                    <Text fontWeight="bold">{log.details}</Text>
                     <Badge colorScheme={COLOR_MAP[log.type] || 'gray'}>
                       {log.type.replace('_', ' ').toUpperCase()}
                     </Badge>
                   </HStack>
                   <Text color="gray.600" fontSize="sm">
-                    {formatDate(log.timestamp)}
+                    {new Date(log.timestamp).toLocaleString()}
                   </Text>
                 </Box>
               </HStack>
