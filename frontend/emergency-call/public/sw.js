@@ -1,14 +1,16 @@
 // Service Worker for Emergency Call App
 
-const CACHE_NAME = 'emergency-app-v2'; // Increment version to force update
+const CACHE_NAME = 'emergency-connect-v1';
 const OFFLINE_URL = '/offline.html';
 
 const urlsToCache = [
   '/',
   '/index.html',
-  '/offline.html',
   '/manifest.json',
-  '/assets/Back1.gif',
+  '/src/main.jsx',
+  '/src/App.jsx',
+  '/src/styles/login.css',
+  '/src/styles/signup.css'
 ];
 
 // Install event - cache essential files
@@ -16,9 +18,16 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     self.skipWaiting(), // Force the waiting service worker to become active
     caches.open(CACHE_NAME)
-      .then((cache) => {
+      .then(cache => {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        // Instead of cache.addAll, we'll use Promise.allSettled to handle failures gracefully
+        const cachePromises = urlsToCache.map(url =>
+          cache.add(url).catch(err => {
+            console.warn(`Failed to cache ${url}:`, err);
+            return null;
+          })
+        );
+        return Promise.allSettled(cachePromises);
       })
       .then(() => self.skipWaiting())
   );
@@ -63,38 +72,14 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(event.request)
-      .then((response) => {
-        // Cache hit - return the response from the cached version
+      .then(response => {
         if (response) {
           return response;
         }
-
-        // Not in cache - return the result from the live server
-        // and add it to the cache for future
-        return fetch(event.request)
-          .then((response) => {
-            // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clone the response since it's a stream
-            // Use one for the cache and one to return to the browser
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          })
-          .catch(() => {
-            // If the network is unavailable, try to return the offline page
-            if (event.request.mode === 'navigate') {
-              return caches.match(OFFLINE_URL);
-            }
-          });
+        return fetch(event.request).catch(error => {
+          console.warn('Fetch failed:', error);
+          return new Response('Offline content not available');
+        });
       })
   );
 });

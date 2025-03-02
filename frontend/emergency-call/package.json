@@ -5,7 +5,7 @@
   "scripts": {
     "predev": "node scripts/create-icons.js || node scripts/create-placeholder-icons.js",
     "create-icons": "node scripts/create-placeholder-icons.js",
-    "dev": "vite --host",
+    "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -14,6 +14,7 @@
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "firebase": "^11.4.0",
     "framer-motion": "^10.16.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -30,6 +31,6 @@
     "eslint": "^8.35.0",
     "eslint-config-react-app": "^7.0.1",
     "vite": "^4.1.0",
-    "vite-plugin-pwa": "^0.14.4"
+    "vite-plugin-pwa": "^0.21.1"
   }
 }

@@ -5,12 +5,14 @@ import { VitePWA } from 'vite-plugin-pwa'
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-    port: 5173,
+    port: 5174,
+    strictPort: true, // Don't try other ports if 5174 is taken
+    host: 'localhost',
+    open: false, // Don't open browser automatically
     hmr: {
-      // Fix for WebSocket connection issues
       host: 'localhost',
       protocol: 'ws',
-      port: 5173,
+      port: 5174,
     },
   },
   build: {

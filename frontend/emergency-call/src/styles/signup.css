@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #f6f5f7 0%, #e9e9e9 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    position: relative;
+}
+
+/* Remove the background image temporarily until we have one */
+/* body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(246, 245, 247, 0.9) 0%, rgba(233, 233, 233, 0.9) 100%);
+    z-index: -1;
+} */
+
+h1 {
+    font-weight: 700;
+    margin: 0 0 15px;
+    font-size: 28px;
+    color: #333;
+    letter-spacing: -0.5px;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.2px;
+    margin: 20px 0 30px;
+    color: #666;
+}
+
+span {
+    font-size: 13px;
+    color: #757575;
+    margin-bottom: 15px;
+}
+
+a {
+    color: #666;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #ff416c;
+}
+
+.auth-container {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1),
+                0 10px 10px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 580px;
+    transition: transform 0.3s ease;
+}
+
+.auth-container:hover {
+    transform: translateY(-5px);
+}
+
+.auth-box {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.auth-title {
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.auth-form {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-input {
+    background: #f7f7f7;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 15px;
+    width: 100%;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #ff416c;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(255, 65, 108, 0.1);
+}
+
+.auth-button {
+    border-radius: 25px;
+    border: none;
+    width: 100%;
+    padding: 14px 45px;
+    margin: 10px 0;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.auth-button-primary {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    color: #fff;
+    box-shadow: 0 7px 15px rgba(255, 65, 108, 0.2);
+}
+
+.auth-button-google {
+    background: #fff;
+    color: #757575;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.auth-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255, 65, 108, 0.3);
+}
+
+.auth-button:active {
+    transform: translateY(1px);
+}
+
+.auth-button.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.auth-link {
+    display: block;
+    margin-top: 20px;
+    color: #666;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+    color: #ff416c;
+}
+
+.error-message {
+    background-color: #fff3f3;
+    border: 1px solid #ff8a8a;
+    color: #e53e3e;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin: 10px 0;
+    font-size: 13px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(229, 62, 62, 0.1);
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .auth-container {
+        min-height: 500px;
+    }
+
+    .auth-box {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+} 

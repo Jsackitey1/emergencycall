@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="form-box l-col-wrap">
+        <div class="l-col form-box__content">
+            <h1 class="form-box__title">Sign in to your account</h1>
+            <div class="u-auto-format-text">
+                <p>Welcome back! Please enter your details to continue.</p>
+            </div>
+        </div>
+        <div class="l-col form-box__form">
+            <form id="sign-in" class="form form--sign-in">
+                <label for="email" class="form__label">Email Address</label>
+                <input name="email" type="email" class="form__field" placeholder="Enter your email">
+                
+                <label for="password" class="form__label">Password</label>
+                <input name="password" type="password" class="form__field" placeholder="Enter your password">
+                
+                <input type="submit" class="form__button button" value="Sign in">
+                
+                <button type="button" class="form__button button google-btn">Continue with Google</button>
+            </form>
+            <small class="form-box__addon u-auto-format-text">
+                Don't have an account? <a href="signup.html">Sign up</a>
+            </small>
+        </div>
+    </div>
+</body>
+</html>

@@ -107,18 +107,19 @@ const Dashboard = () => {
 
   const cancelSOS = useCallback(() => {
     if (sosTimer) {
+      toast({
+        title: 'SOS Cancelled',
+        description: 'Emergency sequence has been cancelled',
+        status: 'info',
+        duration: 3000,
+      });
       clearInterval(sosTimer);
       setSosTimer(null);
     }
     setIsSOSActive(false);   
     setCountdown(5);
     
-    toast({
-      title: 'SOS Cancelled',
-      description: 'Emergency sequence has been cancelled',
-      status: 'info',
-      duration: 3000,
-    });
+    
   }, [sosTimer, toast]);
 
   const handleSOS = useCallback(() => {
@@ -177,35 +178,37 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Container maxW="container.md" py={8} centerContent>
-      <VStack spacing={8} align="center" width="100%" height="630px" justifyContent="center" >
-        <Heading textAlign="center" mb={8} height='300px' >EmergencyConnect</Heading>
-        
-        <Box textAlign="center" width="100%" height="100%" >
+    <Container maxW="container.md" py={4} height="630px">
+      <VStack spacing={6} align="stretch">
+        <Box textAlign="center">
+          <Heading size="xl" mb={2}>EmergencyConnect</Heading>
+          <Text color="gray.600">Quick access to emergency services</Text>
+        </Box>
+
+        <Box 
+          textAlign="center" 
+          py={8}
+        >
           <Button
             size="lg"
-            height="300px"
-            width="300px"
+            height="200px"
+            width="200px"
             borderRadius="full"
             colorScheme={isSOSActive ? 'red' : 'blue'}
             onClick={handleSOS}
             _hover={{ transform: 'scale(1.05)' }}
             transition="all 0.2s"
-            mx="auto"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
+            boxShadow="lg"
             fontSize="2xl"
             fontWeight="bold"
-          > 
+          >
             {isSOSActive ? `Cancel (${countdown})` : 'SOS'}
           </Button>
         </Box>
 
         <Grid 
           templateColumns="repeat(2, 1fr)" 
-          gap={4} 
-          mt={8}
+          gap={4}
           width="100%"
           maxW="500px"
           mx="auto"
@@ -215,7 +218,7 @@ const Dashboard = () => {
             colorScheme="green"
             onClick={handleEmergencyCall}
             size="lg"
-            width="100%"
+            height="100px"
           >
             Emergency Call
           </Button>
@@ -224,7 +227,7 @@ const Dashboard = () => {
             colorScheme="purple"
             onClick={() => navigate('/location')}
             size="lg"
-            width="100%"
+            height="100px"
           >
             Location Map
           </Button>
@@ -233,7 +236,7 @@ const Dashboard = () => {
             colorScheme="orange"
             onClick={sendAlert}
             size="lg"
-            width="100%"
+            height="100px"
           >
             Send Alert
           </Button>
@@ -242,7 +245,7 @@ const Dashboard = () => {
             colorScheme="teal"
             onClick={() => navigate('/history')}
             size="lg"
-            width="100%"
+            height="100px"
           >
             View History
           </Button>
