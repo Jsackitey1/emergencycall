@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react';
 
 export function useLocalStorage(key, initialValue) {
+  // Check if window is available (for SSR compatibility)
+  const isClient = typeof window !== 'undefined';
+  
   // Get from local storage then
   // parse stored json or return initialValue
   const readValue = () => {
+    if (!isClient) {
+      return initialValue;
+    }
+    
     try {
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
@@ -21,6 +28,10 @@ export function useLocalStorage(key, initialValue) {
   // ... persists the new value to localStorage.
   const setValue = value => {
     try {
+      if (!isClient) {
+        return;
+      }
+      
       // Allow value to be a function so we have same API as useState
       const valueToStore = value instanceof Function ? value(storedValue) : value;
       // Save to local storage
@@ -33,8 +44,10 @@ export function useLocalStorage(key, initialValue) {
   };
 
   useEffect(() => {
-    setStoredValue(readValue());
+    if (isClient) {
+      setStoredValue(readValue());
+    }
   }, []);
 
   return [storedValue, setValue];
-} 
+}

@@ -4,6 +4,19 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    port: 5173,
+    hmr: {
+      // Fix for WebSocket connection issues
+      host: 'localhost',
+      protocol: 'ws',
+      port: 5173,
+    },
+  },
+  build: {
+    // Improve caching by using content hashing
+    chunkSizeWarningLimit: 1600,
+  },
   plugins: [
     react(),
     VitePWA({
@@ -29,6 +42,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        skipWaiting: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

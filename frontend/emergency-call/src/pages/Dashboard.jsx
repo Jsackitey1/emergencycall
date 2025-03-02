@@ -18,14 +18,17 @@ import {
 } from '@chakra-ui/react';
 import { FaPhone, FaMapMarkerAlt, FaBell, FaHistory } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from '../hooks/useLocation';
 import { useEmergency } from '../context/EmergencyContext';
 
 const Dashboard = () => {
   const [isSOSActive, setIsSOSActive] = useState(false);
   const [countdown, setCountdown] = useState(5);
+  const [sosTimer, setSosTimer] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
+  const { location } = useLocation();
   const { contacts, settings, addHistoryEntry } = useEmergency();
 
   const handleEmergencyCall = () => {
@@ -102,31 +105,59 @@ const Dashboard = () => {
     });
   };
 
+  const cancelSOS = useCallback(() => {
+    if (sosTimer) {
+      clearInterval(sosTimer);
+      setSosTimer(null);
+    }
+    setIsSOSActive(false);   
+    setCountdown(5);
+    
+    toast({
+      title: 'SOS Cancelled',
+      description: 'Emergency sequence has been cancelled',
+      status: 'info',
+      duration: 3000,
+    });
+  }, [sosTimer, toast]);
+
   const handleSOS = useCallback(() => {
+    // If SOS is already active, cancel it
+    if (isSOSActive) {
+      cancelSOS();
+      return;
+    }
+    
     if (!contacts.length) {
       onOpen();
       return;
     }
-
+    
     setIsSOSActive(true);
     let count = 5;
-
+    setCountdown(count);
+    
     const timer = setInterval(() => {
       count -= 1;
       setCountdown(count);
-
-      if (count === 0) {
-        clearInterval(timer);
-        setIsSOSActive(false);
-        // Trigger emergency actions
+      if (count <= 0) {
         handleEmergencyCall();
         shareLocation();
         sendAlert();
+        cancelSOS();
+        clearInterval(timer);
       }
     }, 1000);
 
-    return () => clearInterval(timer);
-  }, [contacts.length]);
+    setSosTimer(timer);
+  }, [contacts.length, isSOSActive, cancelSOS, handleEmergencyCall, shareLocation, sendAlert]);
+  
+  // Clean up timer when component unmounts
+  useEffect(() => {
+    return () => {
+      if (sosTimer) clearInterval(sosTimer);
+    };
+  }, [sosTimer]);
 
   useEffect(() => {
     // Request necessary permissions
@@ -147,14 +178,14 @@ const Dashboard = () => {
 
   return (
     <Container maxW="container.md" py={8} centerContent>
-      <VStack spacing={8} align="center" width="100%">
-        <Heading textAlign="center" mb={8}>EmergencyConnect</Heading>
+      <VStack spacing={8} align="center" width="100%" height="630px" justifyContent="center" >
+        <Heading textAlign="center" mb={8} height='300px' >EmergencyConnect</Heading>
         
-        <Box textAlign="center" width="100%">
+        <Box textAlign="center" width="100%" height="100%" >
           <Button
             size="lg"
-            height="200px"
-            width="200px"
+            height="300px"
+            width="300px"
             borderRadius="full"
             colorScheme={isSOSActive ? 'red' : 'blue'}
             onClick={handleSOS}
@@ -166,7 +197,7 @@ const Dashboard = () => {
             justifyContent="center"
             fontSize="2xl"
             fontWeight="bold"
-          >
+          > 
             {isSOSActive ? `Cancel (${countdown})` : 'SOS'}
           </Button>
         </Box>
@@ -191,11 +222,11 @@ const Dashboard = () => {
           <Button
             leftIcon={<FaMapMarkerAlt />}
             colorScheme="purple"
-            onClick={shareLocation}
+            onClick={() => navigate('/location')}
             size="lg"
             width="100%"
           >
-            Share Location
+            Location Map
           </Button>
           <Button
             leftIcon={<FaBell />}

@@ -8,12 +8,16 @@ const socketIo = require('socket.io');
 // Express app
 const app = express();
 const server = http.createServer(app);
+
+// Configure CORS with environment variables
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ["http://localhost:5173"];
+
 io = socketIo(server, {
-    cors: { origin: ["http://localhost:5173/"] }
-}) // Enable CORS 
+    cors: { origin: allowedOrigins }
+}); 
+app.use(cors({ origin: allowedOrigins }));
 
 // Middleware
-app.use(cors());
 app.use(express.json());
 
 // Import and pass io to routes
@@ -44,10 +48,11 @@ io.on('connection', (socket) => {
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("Connected to MongoDB"))
     .then(() => {
-        server.listen(4000, () => {
-            console.log("🚀 Server running on port 4000");
+        const PORT = process.env.PORT || 4000;
+        server.listen(PORT, () => {
+            console.log(`🚀 Server running on port ${PORT}`);
         });
     })
     .catch(err => console.log(err));
-

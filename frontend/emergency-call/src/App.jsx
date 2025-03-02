@@ -1,61 +1,91 @@
-import { ChakraProvider, CSSReset, Box, Center } from '@chakra-ui/react';
+import { ChakraProvider, CSSReset, Box, Center, Spinner, Text, Alert, AlertIcon } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useLocation } from './hooks/useLocation';
 import Dashboard from './pages/Dashboard';
 import Contacts from './pages/Contacts';
 import Settings from './pages/Settings';
 import History from './pages/History';
+// import UpdateNotification from './components/UpdateNotification';
+import Location from './pages/Location';
+import MapView from './pages/MapView';
 import Navigation from './components/Navigation';
 import { EmergencyProvider } from './context/EmergencyContext';
+import { useEffect, useState } from 'react';
 
 function App() {
-  const { location } = useLocation();
+  const APP_VERSION = '1.0.1'; // Add version tracking
+  const [mapsLoaded, setMapsLoaded] = useState(false);
+  const [mapsError, setMapsError] = useState(null);
 
-  const mapUrl = location
-    ? `https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&zoom=15&size=2048x2048&scale=2&maptype=roadmap&key=AIzaSyDGsTxaviBiGwRE2YKV7xxkoOHA8eUPy5k`
-    : `https://maps.googleapis.com/maps/api/staticmap?center=40.7128,-74.0060&zoom=12&size=2048x2048&scale=2&maptype=roadmap&key=AIzaSyDGsTxaviBiGwRE2YKV7xxkoOHA8eUPy5k`;
+  useEffect(() => {
+    // Check if Google Maps API is already loaded to prevent duplicate loading
+    const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+    
+    if (!googleMapsApiKey || googleMapsApiKey === 'undefined') {
+      console.error('Google Maps API key is missing. Please add it to your .env file.');
+      setMapsError('Google Maps API key is missing');
+      return;
+    }
+
+    // If Google Maps is already loaded, don't load it again
+    if (window.google && window.google.maps) {
+      console.log('Google Maps API already loaded');
+      setMapsLoaded(true);
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      console.log('Google Maps API loaded successfully');
+      setMapsLoaded(true);
+    };
+    script.onerror = (error) => {
+      console.error('Error loading Google Maps API:', error);
+      setMapsError('Failed to load Google Maps API');
+    };
+    
+    // Define the callback function
+    window.initMap = function() {
+      console.log('Google Maps initialized via callback');
+    };
+    document.head.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    console.log(`App version: ${APP_VERSION}`);
+  }, []);
 
   return (
     <ChakraProvider>
       <CSSReset />
-      <EmergencyProvider>
-        <Router>
-          <Box 
-            pb={20} 
-            minH="100vh" 
-            display="flex" 
-            flexDirection="column"
-            alignItems="center"
-            width="100%"
-            position="relative"
-            zIndex={1}
-            sx={{
-              '&::before': {
-                content: '""',
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundImage: `url('${mapUrl}')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                zIndex: -1,
-                filter: 'brightness(0.9)',
-                transition: 'background-image 0.3s ease-in-out',
-              }
-            }}
-          >
+      <EmergencyProvider>        
+        <Router>          
+          {mapsError && (
+            <Alert status="error" mb={4}>
+              <AlertIcon />
+              {mapsError}
+            </Alert>
+          )}
+          
+          {!mapsLoaded && !mapsError ? (
+            <Center p={8} height="100vh">
+              <Spinner size="xl" color="blue.500" mr={4} /> 
+              <Text>Loading Google Maps...</Text>
+            </Center>
+          ) : (
             <Box 
+              display={mapsLoaded || mapsError ? "flex" : "none"}
               className="content-wrapper" 
-              mx={4} 
+              mx="auto"
               my={4} 
               p={4} 
-              flex="1"
+              flex="1" 
+              pb="80px" 
               width="100%"
               maxW="container.md"
-              display="flex"
+              // display="flex"
               flexDirection="column"
               alignItems="center"
               bg="rgba(255, 255, 255, 0.85)"
@@ -67,11 +97,14 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/location" element={<Location />} />
+                <Route path="/map" element={<MapView />} />
                 <Route path="/history" element={<History />} />
               </Routes>
             </Box>
-            <Navigation />
-          </Box>
+          )}
+          <Navigation />
+          {/* <UpdateNotification /> */}
         </Router>
       </EmergencyProvider>
     </ChakraProvider>

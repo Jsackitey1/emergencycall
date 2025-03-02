@@ -1,128 +1,74 @@
-import {
-  Container,
-  VStack,
-  Heading,
-  FormControl,
-  FormLabel,
-  Switch,
-  Textarea,
-  Button,
-  useToast,
-  Box,
-  Text,
-  Divider,
-} from '@chakra-ui/react';
-import { useInstallPWA } from '../hooks/useInstallPWA';
+import { useState } from 'react';
+import { Container, VStack, Heading, Switch, FormControl, FormLabel, Textarea, Button, Box, Text, useToast } from '@chakra-ui/react';
 import { useEmergency } from '../context/EmergencyContext';
-import { FaDownload } from 'react-icons/fa';
+import { forceRefresh } from '../utils/appUtils';
 
 const Settings = () => {
   const { settings, updateSettings } = useEmergency();
-  const [supportsPWA, handleInstallClick] = useInstallPWA();
+  const [emergencyNumber, setEmergencyNumber] = useState(settings.emergencyNumber);
+  const [emergencyMessage, setEmergencyMessage] = useState(settings.emergencyMessage);
+  const [enableLocationSharing, setEnableLocationSharing] = useState(settings.enableLocationSharing);
   const toast = useToast();
 
-  const handleSettingChange = (setting) => {
+  const handleSaveSettings = () => {
     updateSettings({
-      [setting]: !settings[setting]
+      emergencyNumber,
+      emergencyMessage,
+      enableLocationSharing,
     });
-  };
-
-  const handleMessageChange = (e) => {
-    updateSettings({
-      emergencyMessage: e.target.value
-    });
-  };
-
-  const handleSave = () => {
     toast({
       title: 'Settings Saved',
-      description: 'Your preferences have been updated',
       status: 'success',
       duration: 3000,
+      isClosable: true,
     });
   };
 
   return (
-    <Container maxW="container.md" py={8}>
-      <VStack spacing={8} align="stretch">
-        <Heading textAlign="center">Settings</Heading>
-
-        {supportsPWA && (
-          <Box>
-            <Button
-              leftIcon={<FaDownload />}
-              colorScheme="purple"
-              onClick={handleInstallClick}
-              width="full"
-            >
-              Install App
-            </Button>
-          </Box>
-        )}
-
-        <Box>
-          <Text fontSize="xl" mb={4}>Notifications</Text>
-          <VStack spacing={4} align="stretch">
-            <FormControl display="flex" alignItems="center">
-              <FormLabel mb="0">
-                SMS Alerts
-              </FormLabel>
-              <Switch
-                isChecked={settings.smsAlerts}
-                onChange={() => handleSettingChange('smsAlerts')}
-                colorScheme="blue"
-              />
-            </FormControl>
-
-            <FormControl display="flex" alignItems="center">
-              <FormLabel mb="0">
-                Push Notifications
-              </FormLabel>
-              <Switch
-                isChecked={settings.pushNotifications}
-                onChange={() => handleSettingChange('pushNotifications')}
-                colorScheme="blue"
-              />
-            </FormControl>
-
-            <FormControl display="flex" alignItems="center">
-              <FormLabel mb="0">
-                Location Sharing
-              </FormLabel>
-              <Switch
-                isChecked={settings.locationSharing}
-                onChange={() => handleSettingChange('locationSharing')}
-                colorScheme="blue"
-              />
-            </FormControl>
-          </VStack>
-        </Box>
-
-        <Divider />
-
-        <Box>
-          <Text fontSize="xl" mb={4}>Emergency Message</Text>
+    <Container maxW="md" py={8} width='500px' height='700px' justifyContent='center' alignItems='center'>
+      <Heading mb={6}>Settings</Heading>
+      <Box borderWidth={1} borderRadius="md" p={6} alignItems={'center'}>
+        <VStack spacing={5} align='center' height="400px">
           <FormControl>
-            <FormLabel>Default Emergency Message</FormLabel>
+            <FormLabel>Emergency Number</FormLabel>
             <Textarea
-              value={settings.emergencyMessage}
-              onChange={handleMessageChange}
-              placeholder="Enter your default emergency message"
-              rows={4}
+              value={emergencyNumber}
+              onChange={(e) => setEmergencyNumber(e.target.value)}
+              placeholder="Enter emergency number"
             />
           </FormControl>
-        </Box>
+          <FormControl>
+            <FormLabel>Emergency Message</FormLabel>
+            <Textarea
+              value={emergencyMessage}
+              onChange={(e) => setEmergencyMessage(e.target.value)}
+              placeholder="Enter emergency message"
+            />
+          </FormControl>
+          <FormControl display="flex" alignItems="center">
+            <FormLabel mb="0">Enable Location Sharing</FormLabel>
+            <Switch
+              isChecked={enableLocationSharing}
+              onChange={(e) => setEnableLocationSharing(e.target.checked)}
+            />
+          </FormControl>
+          <Button colorScheme="blue" onClick={handleSaveSettings}>
+            Save Settings
+          </Button>
+        </VStack>
+      </Box>
 
-        <Button
-          colorScheme="blue"
-          size="lg"
-          onClick={handleSave}
+      <Box mt={8} p={4} borderWidth={1} borderRadius="md">
+        <Heading size="md" mb={4}>Developer Options</Heading>
+        <Button 
+          colorScheme="red" 
+          onClick={forceRefresh}
         >
-          Save Settings
+          Force Refresh App
         </Button>
-      </VStack>
+      </Box>
     </Container>
   );
 };
 
-export default Settings; 
+export default Settings;

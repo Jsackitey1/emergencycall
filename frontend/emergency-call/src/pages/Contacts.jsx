@@ -67,7 +67,7 @@ const Contacts = () => {
 
   return (
     <Container maxW="container.md" py={8}>
-      <VStack spacing={8} align="stretch">
+      <VStack spacing={8} align="stretch" width = '430px' height = '630px'>
         <Heading textAlign="center">Emergency Contacts</Heading>
 
         <Box>

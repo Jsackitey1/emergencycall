@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const useInstallPWA = () => {
+export function useInstallPWA() {
   const [supportsPWA, setSupportsPWA] = useState(false);
   const [promptInstall, setPromptInstall] = useState(null);
 
@@ -10,21 +10,29 @@ export const useInstallPWA = () => {
       setSupportsPWA(true);
       setPromptInstall(e);
     };
+    
     window.addEventListener('beforeinstallprompt', handler);
 
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
-  const handleInstallClick = async () => {
+  const handleInstallClick = () => {
     if (!promptInstall) {
       return;
     }
+    
     promptInstall.prompt();
-    const { outcome } = await promptInstall.userChoice;
-    if (outcome === 'accepted') {
+    
+    promptInstall.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      
       setPromptInstall(null);
-    }
+    });
   };
 
   return [supportsPWA, handleInstallClick];
-}; 
+}

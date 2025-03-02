@@ -7,7 +7,7 @@ import {
   HStack,
   Container,
 } from '@chakra-ui/react';
-import { FaHome, FaAddressBook, FaCog, FaHistory } from 'react-icons/fa';
+import { FaHome, FaAddressBook, FaCog, FaHistory, FaMapMarkerAlt, FaMap } from 'react-icons/fa';
 
 const Navigation = () => {
   const location = useLocation();
@@ -20,6 +20,8 @@ const Navigation = () => {
 
   const NAV_ITEMS = [
     { name: 'Dashboard', path: '/', icon: FaHome },
+    { name: 'Location', path: '/location', icon: FaMapMarkerAlt },
+    { name: 'Map', path: '/map', icon: FaMap },
     { name: 'Contacts', path: '/contacts', icon: FaAddressBook },
     { name: 'Settings', path: '/settings', icon: FaCog },
     { name: 'History', path: '/history', icon: FaHistory },
@@ -32,6 +34,7 @@ const Navigation = () => {
       bottom={0}
       left={0}
       right={0}
+      height="70px"
       borderTopWidth={1}
       shadow="lg"
       style={{ 
@@ -41,7 +44,7 @@ const Navigation = () => {
       py={2}
     >
       <Container maxW="container.md" centerContent>
-        <Flex width="100%" justifyContent="center">
+        <Flex width="100%" justifyContent="center" overflowX="auto">
           <HStack spacing={2} justify="center">
             {NAV_ITEMS.map((item) => (
               <Button
