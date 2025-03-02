@@ -181,7 +181,7 @@ const Dashboard = () => {
     <Container maxW="container.md" py={4} height="630px">
       <VStack spacing={6} align="stretch">
         <Box textAlign="center">
-          <Heading size="xl" mb={2}>EmergencyConnect</Heading>
+          <Heading size="xl" mb={2}>VigilWatch</Heading>
           <Text color="gray.600">Quick access to emergency services</Text>
         </Box>
 
