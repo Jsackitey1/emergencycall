@@ -17,7 +17,7 @@ We developed VigilWatch using:
 - Firebase/Auth for secure user authentication
 - Geolocation APIs to enable real-time location tracking
 - Twilio API for emergency SMS alerts
-- Node.js & Express (if applicable) for backend functionalities
+- Node.js & Express for backend functionalities
 
 ## Challenges we ran into
 - Real-time location sharing: Ensuring accuracy and security while integrating GPS data
